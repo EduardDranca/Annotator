@@ -12,9 +12,20 @@
     width: 50px;
     float: left;
     position: relative;
+    z-index: 1;
 }
 
 .right {
     background: linear-gradient(-90deg, rgba(211, 211, 211, 0.705), rgba(107, 107, 107, 0.0));
     float: right
+}
+
+.side-nav:hover {
+    cursor: pointer;
+}
+
+.graphical-container {
+    position: absolute;
+    display: block;
+    z-index: 0;
 }

@@ -1,4 +1,9 @@
-<div class='content-view'>
-    <div class='side-nav' id='prev-chevron'></div>
-    <div class='side-nav right' id='next-chevron'></div>
+<div #contentView class='content-view'>
+    <div class='side-nav' id='prev-chevron' (click)='changeImage(imageIndex - 1)'></div>
+    <app-graphical-container class='graphical-container'
+    [width]='graphicalContainerWidth'
+    [height]='graphicalContainerHeight'
+    [images]='images'
+    [imageIndex]='imageIndex'></app-graphical-container>
+    <div class='side-nav right' id='next-chevron' (click)='changeImage(imageIndex + 1)'></div>
 </div>

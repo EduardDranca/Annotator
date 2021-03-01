@@ -1,56 +1,57 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnInit, SecurityContext } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IpcService } from '../ipc.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TestServiceService } from '../test-service.service';
-import * as PIXI from 'pixi.js';
+import { ImageModel } from '../models/image-model';
 
 @Component({
   selector: 'app-content-view',
   templateUrl: './content-view.component.html',
-  styleUrls: ['./content-view.component.css'],
-  changeDetection: ChangeDetectionStrategy.Default
+  styleUrls: ['./content-view.component.css']
 })
 export class ContentViewComponent implements OnInit {
-  private app: any;
-  private container: any;
-
-  public images: string[] = [];
+  public images: ImageModel[] = [];
+  public imageIndex: number = 0;
+  public graphicalContainerWidth: number = 0;
+  public graphicalContainerHeight: number = 0;
+  @ViewChild('contentView', {read: ElementRef}) contentViewRef?: ElementRef;
 
   constructor(
     private ipc: IpcService,
     private testService: TestServiceService,
-    private cdr: ChangeDetectorRef,
-    private domSanitizer: DomSanitizer,
-    private elementRef: ElementRef,
-    private ngZone: NgZone) { };
+    private cdr: ChangeDetectorRef) { };
 
   ngOnInit(): void {
-    this.ngZone.runOutsideAngular(() => {
-      this.app = new PIXI.Application();
-      this.container = new PIXI.Container();
-      this.app.stage.addChild(this.container);
-    });
-    this.elementRef.nativeElement.appendChild(this.app.view);
-
-    this.ipc.on('directory-opened', (event, args) => {
+    this.ipc.on('directory-opened', (_event, args) => {
       if (args.length !== 0) {
-        this.testService.test(args[0]).subscribe(value => {
-          this.images = value;
-          const texture = PIXI.Texture.from(this.images[0]);
-          const sprite = new PIXI.Sprite(texture);
-          this.container.addChild(sprite);
-          this.container.x = this.app.screen.width / 2;
-          this.container.y = this.app.screen.height / 2;
-
-          this.app.ticker.add((delta: number) => {
-            this.container.rotation -= 0.01 * delta;
+        this.testService.test(args[0]).subscribe(imagePaths => {
+          this.images = imagePaths.map(path => {
+            return new ImageModel(path);
           });
+          this.changeImage(0);
+          this.cdr.detectChanges();
         });
       }
     })
   };
 
-  sanitizeUrl(url: string): SafeUrl {
-    return this.domSanitizer.bypassSecurityTrustUrl(url);
+  ngAfterViewInit() {
+    this.reloadGraphicalContainerSize();
+    if (this.contentViewRef !== undefined) {
+      window.onresize = () => {
+        this.reloadGraphicalContainerSize();
+      };
+    }
+  }
+
+  reloadGraphicalContainerSize() {
+    if (this.contentViewRef !== undefined) {
+      this.graphicalContainerWidth = this.contentViewRef.nativeElement.clientWidth;
+      this.graphicalContainerHeight = this.contentViewRef.nativeElement.clientHeight;
+    }
+    this.cdr.detectChanges();
+  }
+
+  changeImage(index: number) {
+    this.imageIndex = Math.max(Math.min(index, this.images.length - 1), 0);
   }
 }

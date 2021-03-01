@@ -5,11 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ContentViewComponent } from './content-view/content-view.component';
+import { GraphicalContainerComponent } from './graphical-container/graphical-container.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ContentViewComponent
+    ContentViewComponent,
+    GraphicalContainerComponent
   ],
   imports: [
     BrowserModule,
