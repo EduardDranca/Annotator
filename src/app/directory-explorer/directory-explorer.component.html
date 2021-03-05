@@ -1,0 +1,10 @@
+<div class='directory-explorer'>
+    <h4 class='directory-header'>{{directory}}</h4>
+    <div class='directory-explorer-content'>
+        <app-file-label 
+        *ngFor='let img of images; let i = index'
+        [selected]='i === selectedImage'
+        (click)='handleLabelClick($event, i)'
+        [fileName]='img'></app-file-label>
+    </div>
+</div>

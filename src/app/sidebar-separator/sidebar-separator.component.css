@@ -1,0 +1,10 @@
+.sidebar-separator {
+    height: 100vh;
+    width: 10px;
+    float: left;
+    background-color: rgb(61, 61, 105);
+}
+
+.sidebar-separator:hover {
+    cursor: ew-resize;
+}

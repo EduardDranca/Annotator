@@ -1,12 +1,10 @@
 .content-view {
     background-color: rgb(146, 146, 146);
-    height: calc(100vh - 40px);
-    width: calc(100vw - 220px);
-    margin: 20px;
-    margin-left: 200px;
+    height: 100vh;
+    float: right;
 }
 
-.side-nav {
+.sidenav {
     background: linear-gradient(90deg, rgba(211, 211, 211, 0.705), rgba(107, 107, 107, 0.0));
     height: 100%;
     width: 50px;
@@ -20,7 +18,7 @@
     float: right
 }
 
-.side-nav:hover {
+.sidenav:hover {
     cursor: pointer;
 }
 
@@ -28,4 +26,5 @@
     position: absolute;
     display: block;
     z-index: 0;
+    height: 100vh;
 }

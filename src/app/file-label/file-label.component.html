@@ -1,0 +1,4 @@
+<div *ngIf='selected; else default' class='file-label selected'>{{fileName}}</div>
+<ng-template #default>
+    <div class='file-label'>{{fileName}}</div>
+</ng-template>

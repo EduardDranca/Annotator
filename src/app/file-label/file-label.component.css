@@ -1,0 +1,15 @@
+.file-label {
+    padding-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    user-select: none;
+}
+
+.selected {
+    background-color: rgba(160, 160, 160, 0.23);
+}
+
+.file-label:hover {
+    background-color: rgba(0, 0, 0, 0.171);
+    cursor: pointer;
+}

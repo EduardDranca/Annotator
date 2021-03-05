@@ -1,3 +1,5 @@
-<div>
-  <app-content-view></app-content-view>
+<div #fullContainer class='full-container' (mouseup)='handleMouseup()' (mousemove)='handleMousemove($event)'>
+  <app-sidebar [width]='sidebarWidth'></app-sidebar>
+  <app-sidebar-separator (mousedown)='handleSidebarSeparatorClick($event)'></app-sidebar-separator>
+  <app-content-view [width]='contentWidth' [height]='contentHeight'></app-content-view>
 </div>

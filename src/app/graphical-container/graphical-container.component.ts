@@ -12,6 +12,10 @@ export class GraphicalContainerComponent implements OnInit {
   private container?: PIXI.Container;
   private currentSprite?: PIXI.Sprite;
   private currentImages: ImageModel[] = [];
+  private containerScale: number = 1;
+  private clickPressed: boolean = false;
+  private prevMouseOffsetX: number = 0;
+  private prevMouseOffsetY: number = 0;
 
   private _width: number = 0;
   private _height: number = 0;
@@ -31,29 +35,21 @@ export class GraphicalContainerComponent implements OnInit {
 
   constructor(
     private ngZone: NgZone,
-    private elementRef: ElementRef) { }
+    private elementRef: ElementRef) {}
   
   ngOnInit(): void {
-    this.ngZone.runOutsideAngular(() => {
-        this.app = new PIXI.Application();
-        this.container = new PIXI.Container();
-        this.app.stage.addChild(this.container);
-        this.app.renderer.resize(this._width, this._height);
-    });
-    if (this.app !== undefined) {
-      this.elementRef.nativeElement.appendChild(this.app.view);
-    }
+    this.initializePIXIApp();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.imageIndex !== undefined) {
+    if (changes.imageIndex) {
       this.imageIndex = changes.imageIndex.currentValue;
       this.loadImage(this.imageIndex);
     }
-    if (changes.width !== undefined || changes.height !== undefined) {
-      if (this.app !== undefined) {
+    if (changes.width || changes.height) {
+      if (this.app) {
         this.app.renderer.resize(this._width, this._height);
-        if (this.container !== undefined) {
+        if (this.container) {
           this.container.x = this.container.x * changes.width.currentValue / changes.width.previousValue;
           this.container.y = this.container.y * changes.height.currentValue / changes.height.previousValue;
         }
@@ -61,11 +57,67 @@ export class GraphicalContainerComponent implements OnInit {
     }
   }
 
+  public zoom(event: WheelEvent) {
+    if (this.container) {
+      if (event.deltaY < 0) {
+        this.containerScale *= 1.1;
+        this.container.scale.set(this.containerScale);
+      } else {
+        this.containerScale *= 0.9;
+        if (this.containerScale <= 0.2) {
+          this.containerScale = 0.2;
+        }
+        this.container.scale.set(this.containerScale);
+      }
+    }
+  }
+
+  initializePIXIApp() {
+    this.ngZone.runOutsideAngular(() => {
+      this.app = new PIXI.Application();
+      this.container = new PIXI.Container();
+
+      this.app.stage.addChild(this.container);
+      this.app.renderer.resize(this._width, this._height);
+    });
+
+    if (this.app) {
+      this.elementRef.nativeElement.appendChild(this.app.view);
+    }
+    //TODO: event handling could be moved to a div that has 100% width and height with angular style event handling
+    this.elementRef.nativeElement.onwheel = (event: WheelEvent) => {
+      this.zoom(event);
+    };
+
+    this.elementRef.nativeElement.onmousedown = (event: MouseEvent) => {
+      this.clickPressed = true;
+      this.prevMouseOffsetX = event.offsetX;
+      this.prevMouseOffsetY = event.offsetY;
+    }
+    this.elementRef.nativeElement.onmouseup = (event: MouseEvent) => {
+      this.clickPressed = false;
+    }
+    this.elementRef.nativeElement.onmousemove = (event: MouseEvent) => {
+      if (this.clickPressed) {
+        if (this.container) {
+          console.log(event);
+          this.container.x += event.offsetX - this.prevMouseOffsetX;
+          this.container.y += event.offsetY - this.prevMouseOffsetY;
+          this.prevMouseOffsetX = event.offsetX;
+          this.prevMouseOffsetY = event.offsetY;
+        }
+      }
+    }
+  }
+
   loadImage(index: number) {
+    this.containerScale = 1;
+    this.container?.scale.set(this.containerScale);
+
     if (this.currentImages.length !== 0) {
       this.currentSprite = new PIXI.Sprite(this.currentImages[index].texture);
       this.currentSprite.anchor.set(0.5);
-      if (this.container !== undefined && this.app !== undefined) {
+      if (this.container && this.app) {
         this.container.removeChildren();
 
         this.container.addChild(this.currentSprite);

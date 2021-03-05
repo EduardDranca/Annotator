@@ -1,0 +1,16 @@
+.directory-header {
+    user-select: none;
+    margin-bottom: 10px;
+}
+
+.directory-header:hover {
+    cursor: default;
+}
+
+.directory-explorer {
+    padding-left: 10px;
+}
+
+.directory-explorer-content {
+    padding-left: 10px;
+}
