@@ -54,7 +54,7 @@ export class ContentViewComponent implements OnInit {
   }
 
   changeImage(index: number) {
-    this.explorerService.imageChanged.next(index);
     this.imageIndex = Math.max(Math.min(index, this.images.length - 1), 0);
+    this.explorerService.imageChanged.next(this.imageIndex);
   }
 }

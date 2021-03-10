@@ -1,0 +1,26 @@
+.label-explorer-header > button {
+    border: none;
+    background-color: inherit;
+    font-family: inherit;
+    color: inherit;
+    border-radius: 0px;
+    outline: inherit;
+    border: 1px solid gray;
+    margin: 2px;
+    padding: 5px;
+}
+
+.label-explorer-header {
+    margin: auto;
+    margin-bottom: 10px;
+    max-width: fit-content;
+}
+
+.label-explorer {
+    padding-left: 10px;
+    width: 100%;
+}
+
+.label-explorer-content {
+    padding-left: 10px;
+}

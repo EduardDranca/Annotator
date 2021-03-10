@@ -1,0 +1,13 @@
+<div class='label-explorer'>
+    <div class='label-explorer-header'>
+        <button (click)='createNewLabel($event)'>New Label</button>
+        <button>New Annotation</button>
+        <button>Delete Label</button>
+    </div>
+    <div class='label-explorer-content'>
+        <app-annotation-label
+        *ngFor='let label of labels; let i = index'
+        [label]='label'>
+        </app-annotation-label>
+    </div>
+</div>

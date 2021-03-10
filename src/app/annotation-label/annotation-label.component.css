@@ -1,0 +1,11 @@
+.annotation-label {
+    padding-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    user-select: none;
+}
+
+.annotation-label:hover {
+    background-color: rgba(0, 0, 0, 0.171);
+    cursor: pointer;
+}

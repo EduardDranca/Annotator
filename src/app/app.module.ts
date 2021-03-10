@@ -10,6 +10,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarSeparatorComponent } from './sidebar-separator/sidebar-separator.component';
 import { DirectoryExplorerComponent } from './directory-explorer/directory-explorer.component';
 import { FileLabelComponent } from './file-label/file-label.component';
+import { LabelExplorerComponent } from './label-explorer/label-explorer.component';
+import { AnnotationLabelComponent } from './annotation-label/annotation-label.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,9 @@ import { FileLabelComponent } from './file-label/file-label.component';
     SidebarComponent,
     SidebarSeparatorComponent,
     DirectoryExplorerComponent,
-    FileLabelComponent
+    FileLabelComponent,
+    LabelExplorerComponent,
+    AnnotationLabelComponent
   ],
   imports: [
     BrowserModule,
