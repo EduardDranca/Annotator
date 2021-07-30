@@ -9,3 +9,7 @@
     background-color: rgba(0, 0, 0, 0.171);
     cursor: pointer;
 }
+
+.selected {
+    background-color: rgba(0, 0, 0, 0.171);
+}

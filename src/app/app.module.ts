@@ -12,6 +12,8 @@ import { DirectoryExplorerComponent } from './directory-explorer/directory-explo
 import { FileLabelComponent } from './file-label/file-label.component';
 import { LabelExplorerComponent } from './label-explorer/label-explorer.component';
 import { AnnotationLabelComponent } from './annotation-label/annotation-label.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +29,8 @@ import { AnnotationLabelComponent } from './annotation-label/annotation-label.co
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

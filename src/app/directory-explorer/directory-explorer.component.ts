@@ -9,8 +9,8 @@ import { ExplorerService } from '../services/explorer.service';
 })
 export class DirectoryExplorerComponent implements OnInit {
 
-  public selectedImage: number = 0;
-  public directory: string = '';
+  public selectedImage = 0;
+  public directory = '';
   public images: (string | undefined)[] = [];
 
 

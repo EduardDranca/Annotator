@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class FileLabelComponent implements OnInit {
 
   @Input() fileName: string | undefined = '';
-  @Input() selected: boolean = false;
+  @Input() selected = false;
 
   constructor() { }
 

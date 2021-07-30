@@ -19,39 +19,38 @@ export class AppComponent {
 
   constructor(private cdr: ChangeDetectorRef) {}
 
-  public ngOnInit() {}
+  ngOnInit() {}
 
-  public ngAfterViewInit() {
+  ngAfterViewInit() {
     this.resizeContent();
     window.onresize = () => {
       this.resizeContent();
     }
   }
 
-  public handleMouseup() {
+  handleMouseup() {
     this.sidebarSeparatorClicked = false;
     this.cdr.detectChanges();
   }
 
-  public handleSidebarSeparatorClick(event: MouseEvent) {
+  handleSidebarSeparatorClick(event: MouseEvent) {
     this.sidebarSeparatorClicked = true;
     this.sidebarSizeMouseOffsetX = event.clientX;
   }
 
-  public handleMousemove(event: MouseEvent) {
+  handleMousemove(event: MouseEvent) {
     if (this.sidebarSeparatorClicked) {
       this.handleSidebarWidthChange(event);
     }
   }
 
-
-  public handleSidebarWidthChange(event: MouseEvent) {
+  handleSidebarWidthChange(event: MouseEvent) {
     this.sidebarWidth += event.clientX - this.sidebarSizeMouseOffsetX;
     this.sidebarSizeMouseOffsetX = event.clientX;
     this.resizeContent();
   }
 
-  public resizeContent() {
+  resizeContent() {
     this.contentHeight = this.fullContainerRef?.nativeElement.clientHeight;
     this.contentWidth = this.fullContainerRef?.nativeElement.clientWidth - this.sidebarWidth - this.sidebarSeparatorWidth;
     this.cdr.detectChanges();

@@ -1,1 +1,1 @@
-<div class='annotation-label'>{{label}}</div>
+<div [ngClass]="'annotation-label' + (selected ? ' selected' : '')" (click)='onClick($event)'>{{label}}</div>
