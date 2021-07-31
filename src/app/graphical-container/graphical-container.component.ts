@@ -15,6 +15,7 @@ export class GraphicalContainerComponent implements OnInit {
   private container?: PIXI.Container;
   private currentSprite?: PIXI.Sprite;
   private annotationGraphics?: PIXI.Graphics;
+  private annotationStartingPoint = new PIXI.Point(0, 0);
 
   private currentImages: ImageModel[] = [];
   private containerScale = 1;
@@ -123,21 +124,11 @@ export class GraphicalContainerComponent implements OnInit {
       this.prevMouseOffsetX = event.offsetX;
       this.prevMouseOffsetY = event.offsetY;
       if (this.creatingAnnotation && this.annotationGraphics && this.container && this.app) {
-        this.annotationGraphics.beginFill(1, 0);
         this.annotationGraphics.lineStyle(5, 0xff00ff);
-        // TODO: move this to a function
-        let point = new PIXI.Point(event.offsetX, event.offsetY);
-        // transforms the point in canvas coordinates to container coordinates
-        let containerTransform = this.container.localTransform;
-        let appTransform = this.app.stage.localTransform;
-        let fullMat = containerTransform.append(appTransform);
-        fullMat = fullMat.invert();
-        point = fullMat.apply(point);
+        this.annotationStartingPoint = this.pointToContainerCoords(new PIXI.Point(event.offsetX, event.offsetY));
 
-        console.log(point);
-        this.annotationGraphics.drawRect(point.x, point.y, 1, 1);
-        this.container?.addChild(this.annotationGraphics);
-        console.log(this.annotationGraphics);
+        this.annotationGraphics.drawRect(this.annotationStartingPoint.x, this.annotationStartingPoint.y, 1, 1);
+        this.container.addChild(this.annotationGraphics);
       }
     }
     this.elementRef.nativeElement.onmouseup = (event: MouseEvent) => {
@@ -148,9 +139,12 @@ export class GraphicalContainerComponent implements OnInit {
       if (this.clickPressed) {
         if (this.container) {
           if (this.creatingAnnotation && this.annotationGraphics) {
-            const rect = this.annotationGraphics.getBounds();
-            console.log(rect);
-            this.annotationGraphics?.drawRect(rect?.left, rect?.top, event.screenX - rect?.left, event.screenY - rect?.top);
+            const mousePositionInContainer = this.pointToContainerCoords(new PIXI.Point(event.offsetX, event.offsetY));
+            const upperBound = this.annotationStartingPoint;
+            
+            this.annotationGraphics.clear();
+            this.annotationGraphics.lineStyle(5, 0xff00ff);
+            this.annotationGraphics.drawRect(upperBound.x, upperBound.y, mousePositionInContainer.x - upperBound.x, mousePositionInContainer.y - upperBound.y);
             this.container.addChild(this.annotationGraphics);
           } else {
             this.container.x += event.offsetX - this.prevMouseOffsetX;
@@ -161,6 +155,18 @@ export class GraphicalContainerComponent implements OnInit {
         }
       }
     }
+  }
+
+  pointToContainerCoords(point: PIXI.Point) {
+    if (this.container && this.app) {
+      // transforms the point in canvas coordinates to container coordinates
+      let containerTransform = this.container.localTransform;
+      let appTransform = this.app.stage.localTransform;
+      let fullMat = containerTransform.append(appTransform);
+
+      return fullMat.applyInverse(point);
+    }
+    return new PIXI.Point(NaN, NaN);
   }
 
   loadImage(index: number) {
